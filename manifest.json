@@ -1,0 +1,27 @@
+{
+  "name": "SAT Turkish Memory Trainer",
+  "short_name": "SAT Turkish",
+  "description": "SAT vocabulary practice with Turkish sound similarities, flashcards, quizzes, typing practice, and an editable word bank.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#163A5F",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
