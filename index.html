@@ -1,116 +1,190 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SAT Turkish Memory Trainer</title>
-
-<meta name="theme-color" content="#163A5F">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="SAT Turkish">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SAT Turkish Sound Similarities – A Words</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f5f7fb;color:#172033;margin:0}
-header{background:#163A5F;color:white;padding:18px}
-main{max-width:900px;margin:auto;padding:18px}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-.tabs button{background:#e8eef5;color:#163A5F}.tabs button.active{background:#163A5F;color:#fff}
-.panel{display:none}.panel.active{display:block}
-.card{background:white;border:1px solid #dfe5ee;border-radius:16px;padding:22px}
-.word{font-size:40px;font-weight:800}.meaning{font-size:22px;margin-top:12px}.hint{font-size:20px;color:#163A5F;font-weight:700;margin-top:14px}
-.memory{font-size:17px;margin-top:12px;line-height:1.45}.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.primary{background:#163A5F;color:#fff}.good{background:#e4f4eb;color:#167c4a}.bad{background:#fde8e7;color:#b3261e}
-.choice{width:100%;text-align:left;margin:7px 0;padding:13px;border:1px solid #dfe5ee;background:#fff;color:#172033}
-.correct{background:#eef9f3!important;color:#167c4a}.wrong{background:#fff1f0!important;color:#b3261e}
-input{width:100%;padding:11px;border:1px solid #dfe5ee;border-radius:10px;box-sizing:border-box}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row{border-bottom:1px solid #ddd;padding:10px 0}
-.small{font-size:13px;color:#657089}
-@media(max-width:650px){.grid{grid-template-columns:1fr}.word{font-size:34px}}
-</style>
-</head><body>
-<header><h2 style="margin:0">SAT Turkish Memory Trainer</h2><div>Flashcards • Quiz • Typing • 54 starter words • Add words later</div></header>
-<main>
-<div class="tabs">
-<button class="active" data-tab="flash">Flashcards</button>
-<button data-tab="quiz">Multiple Choice</button>
-<button data-tab="typing">Typing</button>
-<button data-tab="bank">Word Bank</button>
-<button data-tab="add">Add Words</button>
-</div>
-
-<section id="flash" class="panel active"><div class="card">
-<div class="small" id="flashCount"></div>
-<div class="word" id="flashWord"></div>
-<div id="flashAnswer" style="display:none"><div class="meaning" id="flashMeaning"></div><div class="hint" id="flashHint"></div><div class="memory" id="flashMemory"></div></div>
-<div class="controls"><button id="showBtn" class="primary">Show Answer</button><button id="againBtn" class="bad" style="display:none">Study Again</button><button id="knowBtn" class="good" style="display:none">I Know It</button></div>
-</div></section>
-
-<section id="quiz" class="panel"><div class="card">
-<div class="word" id="quizWord" style="font-size:32px"></div><div class="small">Choose the correct meaning.</div><div id="choices"></div>
-<div id="quizFeedback" class="memory"></div><div class="controls"><button id="nextQuiz" class="primary" style="display:none">Next</button></div>
-</div></section>
-
-<section id="typing" class="panel"><div class="card">
-<div class="meaning" id="typeMeaning"></div><div class="hint" id="typeHint"></div>
-<p><input id="typeInput" placeholder="Type the SAT word"></p>
-<div class="controls"><button id="checkType" class="primary">Check</button><button id="nextType" style="display:none">Next</button></div>
-<div id="typeFeedback" class="memory"></div>
-</div></section>
-
-<section id="bank" class="panel"><div class="card"><h3>Word Bank</h3><input id="search" placeholder="Search..."><div id="wordList"></div></div></section>
-
-<section id="add" class="panel"><div class="card"><h3>Add a New Word</h3>
-<div class="grid">
-<div><label>Word</label><input id="newWord"></div>
-<div><label>Meaning</label><input id="newMeaning"></div>
-<div><label>Turkish sound similarity</label><input id="newTurkish"></div>
-<div><label>Memory trick</label><input id="newMemory"></div>
-</div>
-<div class="controls"><button id="addBtn" class="primary">Add Word</button><button id="exportBtn">Export List</button><button id="resetBtn" class="bad">Reset Starter Words</button></div>
-<p class="small">New words and progress are saved on this device in your browser.</p>
-</div></section>
-</main>
-
-<script>
-const starter = [{"word": "abate", "meaning": "to lessen; reduce in intensity", "turkish": "a-ba-te", "memory": "Bir şey 'biter gibi' azalıyor diye düşün → abate = hafiflemek / azalmak."}, {"word": "abstain", "meaning": "to refrain from; deliberately avoid", "turkish": "ab-stay-in", "memory": "'Stay in' ve uzak dur → abstain = kendini tutmak / kaçınmak."}, {"word": "accessible", "meaning": "obtainable, reachable", "turkish": "akses + bilir", "memory": "Akses edilebilir diye düşün: ulaşılabilir / erişilebilir."}, {"word": "acclaim", "meaning": "high praise", "turkish": "alkış / claim", "memory": "Herkes alkışlıyor: büyük övgü."}, {"word": "accolade", "meaning": "high praise, special distinction", "turkish": "alkol değil, alkış!", "memory": "Ödül veya özel takdir: övgü, onur."}, {"word": "accommodating", "meaning": "helpful, obliging, polite", "turkish": "akomode etmek", "memory": "Sana uyum sağlıyor ve yardımcı oluyor."}, {"word": "accord", "meaning": "an agreement", "turkish": "akort", "memory": "Akort = uyum → anlaşma."}, {"word": "accost", "meaning": "to confront verbally", "turkish": "A, koş!", "memory": "Biri sana doğru koşup önünü kesiyor ve yüzleşiyor."}, {"word": "accretion", "meaning": "slow growth in size or amount", "turkish": "artış / birikim", "memory": "Yavaş yavaş birikerek büyüme."}, {"word": "acerbic", "meaning": "biting, bitter in tone or taste", "turkish": "acı", "memory": "Acı ve sert sözler."}, {"word": "acquiesce", "meaning": "to agree without protesting", "turkish": "OK, yes", "memory": "Karşı çıkmadan tamam deyip kabul etmek."}, {"word": "acrimony", "meaning": "bitterness, discord", "turkish": "acı + money", "memory": "Para kavgası → acılık, düşmanlık."}, {"word": "acumen", "meaning": "keen insight", "turkish": "akıl-men", "memory": "Keskin anlayışlı, akıllı biri."}, {"word": "acute", "meaning": "sharp, severe; keen", "turkish": "akut", "memory": "Akut ağrı gibi: keskin, şiddetli."}, {"word": "adamant", "meaning": "unyielding, immovable", "turkish": "adam inat", "memory": "Adam çok inatçı, fikrinden dönmüyor."}, {"word": "adept", "meaning": "extremely skilled", "turkish": "adapt olmuş expert", "memory": "İşe adapte olmuş uzman: çok yetenekli."}, {"word": "adhere", "meaning": "to stick to; to follow devotedly", "turkish": "adhezyon", "memory": "Adhesive gibi: yapışmak; kurala sadık kalmak."}, {"word": "admonish", "meaning": "to caution, criticize, reprove", "turkish": "adamı uyar!", "memory": "Adamı uyar → uyarmak / azarlamak."}, {"word": "adorn", "meaning": "to decorate", "turkish": "donatmak", "memory": "Süslerle donatmak → süslemek."}, {"word": "adroit", "meaning": "skillful, dexterous", "turkish": "Android çok becerikli", "memory": "Becerikli Android robot → maharetli."}, {"word": "adulation", "meaning": "extreme praise", "turkish": "aşırı alkış", "memory": "Abartılı alkış ve övgü."}, {"word": "adumbrate", "meaning": "to sketch out vaguely", "turkish": "umbra = gölge", "memory": "Gölge gibi kabaca çizmek: ana hatları vermek."}, {"word": "adverse", "meaning": "unfavorable, hostile, dangerous", "turkish": "ters / adversary", "memory": "Sana karşı olan şartlar → olumsuz / ters."}, {"word": "adversity", "meaning": "hardship; misfortune", "turkish": "advers → ters", "memory": "Hayat ters gidiyor → adversity = zorluk / kötü talih."}, {"word": "advocate", "meaning": "to argue in favor of; a supporter", "turkish": "avukat", "memory": "Avukat savunur → advocate = savunmak / savunan kişi."}, {"word": "aerial", "meaning": "related to the air", "turkish": "air = hava", "memory": "Aerial görüntü = havadan görüntü."}, {"word": "aesthetic", "meaning": "artistic; appreciation of beauty", "turkish": "estetik", "memory": "Türkçedeki estetik ile aynı çağrışım."}, {"word": "affable", "meaning": "friendly, amiable", "turkish": "afacan ama sevimli", "memory": "Sevimli ve cana yakın biri."}, {"word": "affinity", "meaning": "natural feeling of closeness", "turkish": "afinite", "memory": "Afinite → doğal yakınlık / çekim."}, {"word": "affluent", "meaning": "rich, wealthy", "turkish": "full of money", "memory": "Cebi full para → varlıklı."}, {"word": "affront", "meaning": "an insult", "turkish": "front'unda hakaret", "memory": "Yüzüne karşı hakaret → affront."}, {"word": "aggrandize", "meaning": "to increase; make greater", "turkish": "grand = büyük", "memory": "Bir şeyi daha grand yapmak → büyütmek / yüceltmek."}, {"word": "aggregate", "meaning": "a whole or total; to gather into a mass", "turkish": "agrega", "memory": "İnşaatta agrega parçaları birleşir → aggregate = toplamak / toplam."}, {"word": "aggrieved", "meaning": "distressed, wronged, injured", "turkish": "ağrı", "memory": "Haksızlığa uğramış ve üzgün kişi → aggrieved = mağdur / incinmiş."}, {"word": "agile", "meaning": "quick, nimble", "turkish": "acil", "memory": "Acil durumda hızlı hareket et → agile = çevik / hızlı."}, {"word": "agnostic", "meaning": "believing that the existence of God cannot be proven or disproven", "turkish": "agnostik", "memory": "Türkçedeki agnostik ile aynı → kanıtlanamaz / çürütülemez görüşü."}, {"word": "agriculture", "meaning": "farming", "turkish": "agri + kültür", "memory": "Tarla kültürü → agriculture = tarım."}, {"word": "aisle", "meaning": "a passageway between rows of seats", "turkish": "ayıl!", "memory": "Uçakta 'ayıl, koridordan geç' → aisle = koridor."}, {"word": "alacrity", "meaning": "eagerness, speed", "turkish": "alakır hız", "memory": "Çok istekli ve hızlı davranıyor → alacrity = heves + hız."}, {"word": "alias", "meaning": "a false name or identity", "turkish": "Ali as...", "memory": "Ali başka isim kullanıyor → alias = takma ad / sahte kimlik."}, {"word": "allay", "meaning": "to soothe, ease", "turkish": "alay değil, rahatla", "memory": "Korkuyu azalt, rahatlat → allay = yatıştırmak."}, {"word": "allege", "meaning": "to assert, usually without proof", "turkish": "öylece iddia", "memory": "Kanıt yok ama öylece söylüyor → allege = iddia etmek."}, {"word": "alleviate", "meaning": "to relieve, make more bearable", "turkish": "hafiflet", "memory": "Ağrıyı hafiflet → alleviate = rahatlatmak / azaltmak."}, {"word": "allocate", "meaning": "to distribute, set aside", "turkish": "al, o kadar", "memory": "Herkese pay ayır → allocate = tahsis etmek / dağıtmak."}, {"word": "aloof", "meaning": "reserved, distant", "turkish": "alo? uf...", "memory": "Telefona bile soğuk cevap veriyor → aloof = mesafeli / soğuk."}, {"word": "altercation", "meaning": "a dispute, fight", "turkish": "alter kavga", "memory": "Tartışma büyüyüp kavgaya dönüyor → altercation = ağız dalaşı / kavga."}, {"word": "ambivalent", "meaning": "having mixed or conflicting feelings", "turkish": "ambi = iki", "memory": "İki tarafa da farklı hisler → ambivalent = kararsız / çelişkili duygular."}, {"word": "amicable", "meaning": "friendly; peaceful", "turkish": "ami = arkadaş", "memory": "Arkadaşça bir ortam → amicable = dostça / barışçıl."}, {"word": "apathy", "meaning": "lack of interest or emotion", "turkish": "apatik", "memory": "Apatik biri ilgisizdir → apathy = ilgisizlik."}, {"word": "arbitrary", "meaning": "based on random choice or personal whim", "turkish": "araba terbiye yok", "memory": "Kuralsız, keyfine göre hareket eden biri → arbitrary = keyfi / rastgele."}, {"word": "arduous", "meaning": "difficult; requiring great effort", "turkish": "ardı zor", "memory": "İşin ardı zor geliyor → arduous = çok zahmetli / güç."}, {"word": "assert", "meaning": "to state firmly; declare confidently", "turkish": "sert", "memory": "Sert ve kesin şekilde söylüyor → assert = iddia etmek / kesin biçimde belirtmek."}, {"word": "benevolent", "meaning": "kind; generous; well-meaning", "turkish": "bene = iyi", "memory": "Bene = iyi → benevolent = iyi niyetli / yardımsever."}, {"word": "candid", "meaning": "honest and straightforward", "turkish": "kandırmaz", "memory": "Candid kişi kandırmaz → açık sözlü / dürüst."}];
-const savedWords = JSON.parse(localStorage.getItem('satWords') || 'null') || [];
-const savedMap = new Map(savedWords.map(w => [w.word.toLowerCase(), w]));
-starter.forEach(w => { if (!savedMap.has(w.word.toLowerCase())) savedMap.set(w.word.toLowerCase(), w); });
-let words = Array.from(savedMap.values()).sort((a,b)=>a.word.localeCompare(b.word));
-let known = new Set(JSON.parse(localStorage.getItem('satKnown') || '[]'));
-let fi=0,qcur=null,tcur=null;
-
-function save(){localStorage.setItem('satWords',JSON.stringify(words));localStorage.setItem('satKnown',JSON.stringify([...known]));}
-function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
-document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='quiz')newQuiz();if(b.dataset.tab==='typing')newType();if(b.dataset.tab==='bank')renderBank();});
-
-function renderFlash(){if(!words.length)return; if(fi>=words.length)fi=0;const w=words[fi];flashCount.textContent=`Card ${fi+1} of ${words.length} • Known ${known.size}`;flashWord.textContent=w.word;flashMeaning.textContent=w.meaning;flashHint.textContent='Turkish clue: '+w.turkish;flashMemory.textContent=w.memory;flashAnswer.style.display='none';showBtn.style.display='inline-block';againBtn.style.display=knowBtn.style.display='none';}
-showBtn.onclick=()=>{flashAnswer.style.display='block';showBtn.style.display='none';againBtn.style.display=knowBtn.style.display='inline-block';};
-againBtn.onclick=()=>{known.delete(words[fi].word);fi=(fi+1)%words.length;save();renderFlash();};
-knowBtn.onclick=()=>{known.add(words[fi].word);fi=(fi+1)%words.length;save();renderFlash();};
-
-function newQuiz(){if(words.length<4)return;quizFeedback.textContent='';nextQuiz.style.display='none';choices.innerHTML='';qcur=words[Math.floor(Math.random()*words.length)];quizWord.textContent=qcur.word;let opts=shuffle([qcur,...shuffle(words.filter(x=>x.word!==qcur.word)).slice(0,3)]);opts.forEach(w=>{let b=document.createElement('button');b.className='choice';b.textContent=w.meaning;b.onclick=()=>{[...choices.children].forEach(x=>x.disabled=true);if(w.word===qcur.word){b.classList.add('correct');quizFeedback.textContent='Correct! '+qcur.memory;}else{b.classList.add('wrong');[...choices.children].forEach(x=>{if(x.textContent===qcur.meaning)x.classList.add('correct')});quizFeedback.textContent='Correct answer: '+qcur.meaning+' — '+qcur.memory;}nextQuiz.style.display='inline-block';};choices.appendChild(b);});}
-nextQuiz.onclick=newQuiz;
-
-function newType(){tcur=words[Math.floor(Math.random()*words.length)];typeMeaning.textContent=tcur.meaning;typeHint.textContent='Turkish clue: '+tcur.turkish;typeInput.value='';typeInput.disabled=false;typeFeedback.textContent='';checkType.style.display='inline-block';nextType.style.display='none';}
-checkType.onclick=()=>{let ok=typeInput.value.trim().toLowerCase()===tcur.word.toLowerCase();typeFeedback.textContent=ok?'Correct! '+tcur.memory:'Correct word: '+tcur.word+' — '+tcur.memory;typeInput.disabled=true;checkType.style.display='none';nextType.style.display='inline-block';};
-nextType.onclick=newType;
-
-function renderBank(){let q=search.value.toLowerCase();wordList.innerHTML='';words.filter(w=>(w.word+' '+w.meaning+' '+w.turkish).toLowerCase().includes(q)).forEach(w=>{let d=document.createElement('div');d.className='row';d.innerHTML='<b>'+w.word+'</b> — '+w.meaning+'<br><span class="small">Turkish: '+w.turkish+' | '+w.memory+'</span>';wordList.appendChild(d);});}
-search.oninput=renderBank;
-
-addBtn.onclick=()=>{let w={word:newWord.value.trim(),meaning:newMeaning.value.trim(),turkish:newTurkish.value.trim(),memory:newMemory.value.trim()};if(!w.word||!w.meaning)return alert('Enter at least a word and meaning.');words.push(w);save();[newWord,newMeaning,newTurkish,newMemory].forEach(x=>x.value='');alert('Word added.');renderFlash();};
-exportBtn.onclick=()=>{let blob=new Blob([JSON.stringify(words,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sat-word-list.json';a.click();};
-resetBtn.onclick=()=>{if(confirm('Reset the word list?')){words=starter;known=new Set();save();renderFlash();}};
-save();renderFlash();
-</script>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
+:root {
+  --bg:#f6f7fb; --card:#fff; --text:#18202a; --muted:#667085;
+  --accent:#3157d5; --ok:#137a4b; --bad:#b42318; --border:#e5e7eb;
 }
-</script>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 16px}
+header h1{font-size:19px;margin:0 0 4px} header p{margin:0;color:var(--muted);font-size:13px}
+.wrap{max-width:820px;margin:auto;padding:16px}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+button{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}
+.tab{background:#e9edf7;color:#2b3a55} .tab.active{background:var(--accent);color:white}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 6px 20px rgba(0,0,0,.04);margin-bottom:14px}
+.word{font-size:30px;font-weight:800;margin:0 0 6px}
+.meaning{font-size:16px;color:#344054;margin-bottom:14px}
+.hook{font-size:22px;font-weight:800;color:var(--accent);margin:8px 0}
+.mnemonic{font-size:16px;line-height:1.45}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.primary{background:var(--accent);color:white} .secondary{background:#eef2ff;color:#273a8a}
+.progress{font-size:13px;color:var(--muted);margin-bottom:8px}
+.search{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;font-size:16px;margin-bottom:12px}
+.item{padding:14px 0;border-bottom:1px solid var(--border)} .item:last-child{border-bottom:0}
+.item b{font-size:18px} .small{color:var(--muted);font-size:14px;margin-top:4px}
+.quizq{font-size:20px;font-weight:800;margin-bottom:12px}
+.option{display:block;width:100%;text-align:left;background:#f2f4f7;color:var(--text);margin:8px 0}
+.option.correct{background:#dff4e8;color:var(--ok)} .option.wrong{background:#fde7e5;color:var(--bad)}
+input, textarea{font:inherit}
+.addgrid{display:grid;gap:10px} .addgrid input{padding:11px;border:1px solid var(--border);border-radius:10px}
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 30px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>SAT Turkish Sound Similarities</h1>
+  <p>44 words • Pages 5–7 • Practice on iPhone</p>
+</header>
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab active" data-tab="cards">Flashcards</button>
+    <button class="tab" data-tab="list">Word List</button>
+    <button class="tab" data-tab="quiz">Quiz</button>
+    <button class="tab" data-tab="add">Add Word</button>
+  </div>
 
-</body></html>
+  <section id="cards">
+    <div class="progress" id="progress"></div>
+    <div class="card">
+      <div class="word" id="cardWord"></div>
+      <div class="meaning" id="cardMeaning"></div>
+      <div id="answer" class="hidden">
+        <div class="small">Turkish sound similarity</div>
+        <div class="hook" id="cardHook"></div>
+        <div class="mnemonic" id="cardMnemonic"></div>
+      </div>
+      <div class="row">
+        <button class="primary" id="showBtn">Show Turkish Hook</button>
+        <button class="secondary" id="prevBtn">← Previous</button>
+        <button class="secondary" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="list" class="hidden">
+    <input class="search" id="search" placeholder="Search word, meaning or Turkish hook…">
+    <div class="card" id="listBox"></div>
+  </section>
+
+  <section id="quiz" class="hidden">
+    <div class="card">
+      <div class="progress" id="quizProgress"></div>
+      <div class="quizq" id="quizQ"></div>
+      <div id="options"></div>
+      <div class="row"><button class="primary hidden" id="nextQuiz">Next Question</button></div>
+    </div>
+  </section>
+
+  <section id="add" class="hidden">
+    <div class="card">
+      <h2 style="margin-top:0">Add a new word</h2>
+      <div class="addgrid">
+        <input id="newWord" placeholder="English word">
+        <input id="newMeaning" placeholder="Meaning">
+        <input id="newHook" placeholder="Turkish sound similarity">
+        <input id="newMnemonic" placeholder="Mnemonic sentence">
+        <button class="primary" id="addBtn">Add Word</button>
+      </div>
+      <p class="small">New words are saved on this device/browser using local storage.</p>
+    </div>
+  </section>
+
+  <div class="footer">Built from your SAT vocabulary pages • Turkish sound hooks are memory aids, not translations.</div>
+</div>
+
+<script>
+const starter = [{"word": "aggregate", "meaning": "a whole or total; to gather into a mass", "turkish": "agrega / agregat", "mnemonic": "Hepsini bir araya getirip bir agregat/toplam oluştur."}, {"word": "aggrieved", "meaning": "distressed, wronged, injured", "turkish": "ağrıdı", "mnemonic": "Haksızlığa uğradı, canı 'ağrıdı' → aggrieved."}, {"word": "agile", "meaning": "quick, nimble", "turkish": "acil", "mnemonic": "Acil durumda hızlı ve çevik ol → agile."}, {"word": "agnostic", "meaning": "believing that God's existence cannot be proven or disproven", "turkish": "agnostik", "mnemonic": "Türkçede de 'agnostik' kullanılır."}, {"word": "agriculture", "meaning": "farming", "turkish": "agri-kültür", "mnemonic": "Tarım bir 'agri kültürü' gibi düşün → agriculture."}, {"word": "aisle", "meaning": "passageway between rows of seats", "turkish": "ayıl", "mnemonic": "Uçakta 'ayıl' ve koridordan yürü → aisle."}, {"word": "alacrity", "meaning": "eagerness, speed", "turkish": "ala-kıriti", "mnemonic": "İşi 'ala kıriti' hızla ve hevesle yap → alacrity."}, {"word": "alias", "meaning": "a false name or identity", "turkish": "alyas", "mnemonic": "Takma ad = alias; Türkçedeki 'alyas' sesine yakın."}, {"word": "allay", "meaning": "to soothe, ease", "turkish": "alay", "mnemonic": "Kalabalığı sakinleştir, 'alay' yatışsın → allay."}, {"word": "allege", "meaning": "to assert, usually without proof", "turkish": "öylece", "mnemonic": "Kanıt yok, 'öylece' iddia ediyor → allege."}, {"word": "alleviate", "meaning": "to relieve, make more bearable", "turkish": "hafiflet", "mnemonic": "Alleviate = acıyı hafiflet; 'alevi' azaltır gibi düşün."}, {"word": "allocate", "meaning": "to distribute, set aside", "turkish": "aloket", "mnemonic": "Kaynakları 'alo, ket ket dağıt' → allocate."}, {"word": "aloof", "meaning": "reserved, distant", "turkish": "alo yok", "mnemonic": "Uzak ve soğuk; 'alo' desen cevap yok → aloof."}, {"word": "altercation", "meaning": "a dispute, fight", "turkish": "alter-kavga", "mnemonic": "Bir 'alter' kavgası çıktı → altercation."}, {"word": "amalgamate", "meaning": "to bring together, unite", "turkish": "amalga-mat", "mnemonic": "Parçaları tek bir 'mat' üzerinde birleştir → amalgamate."}, {"word": "ambiguous", "meaning": "uncertain, open to more than one interpretation", "turkish": "ambi-giz", "mnemonic": "Anlamı 'gizli', iki türlü yorumlanıyor → ambiguous."}, {"word": "ambivalent", "meaning": "having opposing feelings", "turkish": "ambi-valans", "mnemonic": "Duygular iki yöne 'valans' yapıyor → ambivalent."}, {"word": "ameliorate", "meaning": "to improve", "turkish": "ameliyat", "mnemonic": "Ameliyat sonrası durum iyileşti → ameliorate."}, {"word": "amenable", "meaning": "willing, compliant", "turkish": "amen / eyvallah", "mnemonic": "Her şeye 'amen/eyvallah' diyor, uyumlu → amenable."}, {"word": "amenity", "meaning": "an item or feature that increases comfort", "turkish": "ameniti", "mnemonic": "Oteldeki konfor sağlayan imkanlar = amenities."}, {"word": "amiable", "meaning": "friendly", "turkish": "ami / amigo", "mnemonic": "Amigo gibi dost canlısı → amiable."}, {"word": "amicable", "meaning": "friendly, without hard feelings", "turkish": "amca-bile", "mnemonic": "Amca bile dostça davrandı → amicable."}, {"word": "amorous", "meaning": "showing love, especially romantic/sexual love", "turkish": "amor", "mnemonic": "'Amor' = aşk; amorous = aşıkane."}, {"word": "amorphous", "meaning": "without definite shape or type", "turkish": "amorf", "mnemonic": "Türkçede 'amorf' = şekilsiz."}, {"word": "anachronistic", "meaning": "out of correct chronological order", "turkish": "anakronik", "mnemonic": "Türkçede 'anakronik' ile aynı kök."}, {"word": "analgesic", "meaning": "something that reduces pain", "turkish": "analjezik", "mnemonic": "Türkçede 'analjezik' = ağrı kesici."}, {"word": "analogous", "meaning": "similar, comparable", "turkish": "analog", "mnemonic": "Analog şeyler birbirine benzer → analogous."}, {"word": "anarchist", "meaning": "one who wants to eliminate government", "turkish": "anarşist", "mnemonic": "Türkçede de 'anarşist'."}, {"word": "anathema", "meaning": "a cursed or detested person/thing", "turkish": "ana tema", "mnemonic": "Nefret edilen 'ana tema' → anathema."}, {"word": "anecdote", "meaning": "a short, humorous or interesting account", "turkish": "anekdot", "mnemonic": "Türkçede 'anekdot'."}, {"word": "anesthesia", "meaning": "loss of sensation", "turkish": "anestezi", "mnemonic": "Türkçede 'anestezi'."}, {"word": "anguish", "meaning": "extreme sadness or torment", "turkish": "angut iş", "mnemonic": "Bu 'angut iş' bana büyük sıkıntı verdi → anguish."}, {"word": "animated", "meaning": "lively", "turkish": "anime", "mnemonic": "Anime karakterleri canlı ve hareketli → animated."}, {"word": "annex", "meaning": "to add/incorporate; an attached room/section", "turkish": "anneks", "mnemonic": "Türkçede 'aneks' = ek bölüm."}, {"word": "annul", "meaning": "to make void or invalid", "turkish": "iptal", "mnemonic": "Annul = iptal etmek; 'an-null' = sıfıra indir."}, {"word": "anomaly", "meaning": "something outside the normal order", "turkish": "anomali", "mnemonic": "Türkçede 'anomali'."}, {"word": "anonymous", "meaning": "unknown, unnamed", "turkish": "anonim", "mnemonic": "Türkçede 'anonim'."}, {"word": "antagonism", "meaning": "hostility, opposition", "turkish": "antagonizma", "mnemonic": "Türkçede 'antagonizma' = karşıtlık."}, {"word": "antecedent", "meaning": "something that came before", "turkish": "önce", "mnemonic": "Ante = önce; antecedent = önce gelen."}, {"word": "antediluvian", "meaning": "ancient, extremely old", "turkish": "anti-diluvyan", "mnemonic": "Tufandan (deluge) önceki kadar eski → antediluvian."}, {"word": "anthology", "meaning": "a selected collection of writings, songs, etc.", "turkish": "antoloji", "mnemonic": "Türkçede 'antoloji'."}, {"word": "antipathy", "meaning": "a strong dislike", "turkish": "antipati", "mnemonic": "Türkçede 'antipati'."}, {"word": "antiquated", "meaning": "old, out of date", "turkish": "antika", "mnemonic": "Antika gibi eski ve modası geçmiş → antiquated."}, {"word": "antiseptic", "meaning": "clean, sterile; preventing infection", "turkish": "antiseptik", "mnemonic": "Türkçede 'antiseptik'."}];
+let custom = JSON.parse(localStorage.getItem('satCustomWords') || '[]');
+let words = [...starter, ...custom];
+let i = 0, qIndex = 0, qScore = 0;
+
+function renderCard() {
+  if (!words.length) return;
+  const w = words[i];
+  document.getElementById('progress').textContent = `Word ${i+1} of ${words.length}`;
+  document.getElementById('cardWord').textContent = w.word;
+  document.getElementById('cardMeaning').textContent = w.meaning;
+  document.getElementById('cardHook').textContent = w.turkish;
+  document.getElementById('cardMnemonic').textContent = w.mnemonic;
+  document.getElementById('answer').classList.add('hidden');
+  document.getElementById('showBtn').textContent = 'Show Turkish Hook';
+}
+document.getElementById('showBtn').onclick = () => {
+  const a = document.getElementById('answer');
+  a.classList.toggle('hidden');
+  document.getElementById('showBtn').textContent = a.classList.contains('hidden') ? 'Show Turkish Hook' : 'Hide Hook';
+};
+document.getElementById('prevBtn').onclick = () => { i=(i-1+words.length)%words.length; renderCard(); };
+document.getElementById('nextBtn').onclick = () => { i=(i+1)%words.length; renderCard(); };
+
+function renderList(filter='') {
+  const f=filter.toLowerCase();
+  const filtered=words.filter(w => Object.values(w).join(' ').toLowerCase().includes(f));
+  document.getElementById('listBox').innerHTML = filtered.map(w => `
+    <div class="item"><b>${w.word}</b>
+      <div>${w.meaning}</div>
+      <div class="hook">${w.turkish}</div>
+      <div class="small">${w.mnemonic}</div>
+    </div>`).join('');
+}
+document.getElementById('search').oninput = e => renderList(e.target.value);
+
+function shuffle(a) { return [...a].sort(()=>Math.random()-.5); }
+function renderQuiz() {
+  const w = words[Math.floor(Math.random()*words.length)];
+  const wrong = shuffle(words.filter(x=>x.word!==w.word)).slice(0,3).map(x=>x.meaning);
+  const choices = shuffle([w.meaning,...wrong]);
+  document.getElementById('quizProgress').textContent = `Score: ${qScore} / ${qIndex}`;
+  document.getElementById('quizQ').textContent = `What does “${w.word}” mean?`;
+  const box=document.getElementById('options'); box.innerHTML='';
+  choices.forEach(c => {
+    const b=document.createElement('button'); b.className='option'; b.textContent=c;
+    b.onclick=()=>{
+      [...box.children].forEach(x=>x.disabled=true);
+      if(c===w.meaning){b.classList.add('correct');qScore++;}
+      else {
+        b.classList.add('wrong');
+        [...box.children].find(x=>x.textContent===w.meaning)?.classList.add('correct');
+      }
+      qIndex++;
+      document.getElementById('quizProgress').textContent = `Score: ${qScore} / ${qIndex}`;
+      document.getElementById('nextQuiz').classList.remove('hidden');
+    };
+    box.appendChild(b);
+  });
+  document.getElementById('nextQuiz').classList.add('hidden');
+}
+document.getElementById('nextQuiz').onclick=renderQuiz;
+
+document.getElementById('addBtn').onclick=()=>{
+  const nw={
+    word:document.getElementById('newWord').value.trim(),
+    meaning:document.getElementById('newMeaning').value.trim(),
+    turkish:document.getElementById('newHook').value.trim(),
+    mnemonic:document.getElementById('newMnemonic').value.trim()
+  };
+  if(!nw.word||!nw.meaning||!nw.turkish) return alert('Please enter word, meaning and Turkish sound similarity.');
+  custom.push(nw); localStorage.setItem('satCustomWords',JSON.stringify(custom)); words=[...starter,...custom];
+  ['newWord','newMeaning','newHook','newMnemonic'].forEach(id=>document.getElementById(id).value='');
+  renderCard(); renderList(); alert('Word added.');
+};
+
+document.querySelectorAll('.tab').forEach(btn=>btn.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  ['cards','list','quiz','add'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  document.getElementById(btn.dataset.tab).classList.remove('hidden');
+  if(btn.dataset.tab==='list')renderList();
+  if(btn.dataset.tab==='quiz')renderQuiz();
+});
+
+renderCard();
+</script>
+</body>
+</html>
